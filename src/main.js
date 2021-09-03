@@ -160,8 +160,6 @@ function setupXWingTexture() {
     var xwingImage = new Image();
     xwingImage.src = baseDir + 'assets/X-Wing-Colors.png';
 
-    console.log('imageDir: ' + xwingImage.src)
-
     xwingImage.onload = function() {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
