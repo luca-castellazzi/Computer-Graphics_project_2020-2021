@@ -158,7 +158,7 @@ function setupXWingTexture() {
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
 
     var xwingImage = new Image();
-    xwingImage.src = baseDir.replace('/src', '') + 'assets/X-Wing-Colors.png';
+    xwingImage.src = baseDir + 'assets/X-Wing-Colors.png';
 
     console.log('imageDir: ' + xwingImage.src)
 
@@ -179,7 +179,7 @@ function setupSurfaceTexture() {
     gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 
     var surfaceImage = new Image();
-    surfaceImage.src = baseDir.replace('/src', '') + 'assets/cliff_surface.jpg';
+    surfaceImage.src = baseDir + 'assets/cliff_surface.jpg';
 
     surfaceImage.onload = function() {
         gl.activeTexture(gl.TEXTURE1);
@@ -197,7 +197,7 @@ function setupCubeMap() {
     gl.activeTexture(gl.TEXTURE2);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, textures[2]);
     
-    let cubeMapDir = baseDir.replace('/src', '') + 'assets/cubemaps/lightblue/';
+    let cubeMapDir = baseDir + 'assets/cubemaps/lightblue/';
  
     const faceInfos = [
         {
