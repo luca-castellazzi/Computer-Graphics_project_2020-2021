@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Flying Ring Chaser</title>
+	<style type="text/css">
+		body {
+			margin: 0;
+			background-color: darkslateblue;
+		}
+
+		canvas {
+			display: block;
+		}
+
+        fieldset {
+            font-family: sans-serif;
+        }
+
+        .container { 
+            height: 200px;
+            position: relative; 
+        }
+
+        .center_button {
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .center_message {
+            margin: 0;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+	</style>
+	<script src="lib/utils.js" type="text/javascript"></script>
+	<script src="lib/webgl-obj-loader.min.js" type="text/javascript"></script>
+    <script src="lib/quaternion.min.js" type="text/javascript"></script>
+    <script src="src/Ring.js" type="text/javascript"></script>
+    <script src="src/config.js" type="text/javascript"></script>
+	<script src="src/init.js" type="text/javascript"></script>
+    <script src="src/main.js" type="text/javascript"></script>
+    <script src="src/collisions.js" type="text/javascript"></script>
+    <script src="src/animate.js" type="text/javascript"></script>
+	<script src="src/drawScene.js" type="text/javascript"></script>
+    <script src="src/cubeMap.js" type="text/javascript"></script>
+    <script src="src/controlsGUI.js" type="text/javascript"></script>
+
+    <link rel="icon" type="png" href="/CG-FlyingRingChaser-Project-2021/assets/favicon.png" sizes="16x16">
+</head>
+
+<body>
+	<canvas id="canvas">
+		Write here something to show if your browser does not support the HTML5 canvas element
+	</canvas>
+
+    <div id="score_label" 
+         style="position: absolute; 
+                z-index: 1; 
+                left: 0px; 
+                top: 0px;
+                background-color: white; 
+                border-style: inset; 
+                border-color: black; 
+                opacity: 0.7; 
+                padding: 5px 10px 5px 10px;
+                overflow: auto">
+        <p style="font-family: sans-serif; font-size: x-large; opacity: 1.0">
+            <b>SCORE:</b>
+            <b id='score'>0</b>
+        </p>
+    </div>
+
+    <div class="container"
+         id="starting_game_label" 
+         style="position: absolute;
+                z-index: 1; 
+                left: 0px; 
+                top: 0px; 
+                background-color: black; 
+                opacity: 0.7;
+                display: none;
+                overflow: visible">
+        <p class="center_message" style="font-family: sans-serif; font-size: xx-large; text-align: center; opacity: 1.0; color: white;">
+            <b>FLYING RING CHASER!</b>
+        </p>
+        <input class="center_button" id="startGame_button" type="button" onclick="startGame()" value="Start Game">
+    </div>
+
+    <div class="container"
+         id="game_over_label" 
+         style="position: absolute;
+                z-index: 1; 
+                left: 0px; 
+                top: 0px; 
+                background-color: red;  
+                opacity: 0.7;
+                overflow: visible">
+        <p class="center_message" style="font-family: sans-serif; font-size: xx-large; text-align: center; opacity: 1.0;">
+            <b>GAME OVER!<br></b>
+            <b>Your score is:<br></b>
+            <b id="final_score">0</b>
+        </p>
+        <input class="center_button" id="playAgain_button" type="button" onclick="restartGame()" value="Restart Game">
+    </div>
+
+    <div id="tools_GUI" 
+         style="position: absolute; 
+                z-index: 1; 
+                left: 10000px; 
+                top: 0px; 
+                background-color: white; 
+                border-color: black; 
+                opacity: 1.0; 
+                overflow: auto">
+        <div style="font-family: sans-serif; padding-top: 5px; padding-left: 5px;"><b>LIGHT CONTROLS:</b></div>
+        <fieldset>
+            <div style="padding-left: 5px;">Light Color: <input id="light_color_button" type="color" oninput="changeDirLightColor(this.value);"></div>
+        </fieldset>
+        <fieldset>
+            <form style="padding-left: 5px;">
+                <input id="directional_radio" type="radio" onchange="enableDirectLightParam();" name="type_light_radio"> Direct Light
+                <input id="point_radio" type="radio" onchange="enablePointLightParam();" name="type_light_radio"> Point Light
+                <input id="spot_radio" type="radio" onchange="enableSpotLightParam();" name="type_light_radio"> Spot Light
+            </form>
+        </fieldset>
+
+        <!-- direct light params -->
+        <fieldset id="dir_fieldset">
+            <fieldset id="light_alpha">
+                <div style="padding-left: 5px;">Light Direction &alpha;:</div><input id="dir_light_alpha_slider" type="range" min="-180" max="180" oninput="changeLightAlpha(this.value);">
+            </fieldset>
+            <fieldset id="light_beta">
+                <div style="padding-left: 5px;">Light Direction &beta;:</div><input id="dir_light_beta_slider" type="range" min="-180" max="180" oninput="changeLightBeta(this.value);">
+            </fieldset>
+        </fieldset>
+
+        <!-- point light params -->
+        <fieldset id="point_fieldset">
+            <fieldset id="light_x">
+                <div style="padding-left: 5px;">Light x:</div><input id="point_light_x_slider" type="range" min="-100" max="100" step="any" oninput="changeLightX(this.value);">
+            </fieldset>
+            <fieldset id="light_y">
+                <div style="padding-left: 5px;">Light y:</div><input id="point_light_y_slider" type="range" min="-100" max="100" step="any" oninput="changeLightY(this.value);">
+            </fieldset>
+            <fieldset id="light_z">
+                <div style="padding-left: 5px;">Light z:</div><input id="point_light_z_slider" type="range" min="-100" max="100" step="any" oninput="changeLightZ(this.value);">
+            </fieldset>
+            <fieldset id="decay_beta">
+                <div style="padding-left: 5px;"> Decay &beta;:</div><input id="point_light_decay_slider" type="range" min="0" max="2" oninput="changeLightDecay(this.value);">
+            </fieldset>
+            <fieldset id="target_distance">
+                <div style="padding-left: 5px;">Target distance g:</div><input id="target_dist_slider" type="range" min="0" max="100" step="any" oninput="changeTargetDist(this.value);">
+            </fieldset>
+        </fieldset>
+
+        <!-- spot light params -->
+        <fieldset id="spot_fieldset">
+            <fieldset id="cone_in">
+                <div style="padding-left: 5px;">Cone IN:</div><input id="cone_in_slider" type="range" min="0" max="1" step="any" oninput="changeConeIn(this.value);">
+            </fieldset>
+            <fieldset id="cone_out">
+                <div style="padding-left: 5px;">Cone OUT:</div><input id="cone_out_slider" type="range" min="0" max="60" oninput="changeConeOut(this.value);">
+            </fieldset>
+        </fieldset>
+
+        <fieldset>
+            <form style="padding-left: 5px;">
+                Reflection model:
+                    <input id="phong_radio" type="radio" name="reflection_radio" onchange="changeToPhong();"> Phong
+                    <input id="blinn_radio" type="radio" name="reflection_radio" onchange="changeToBlinn();"> Blinn
+            </form>
+        </fieldset>
+        <fieldset id="ring_shine">
+            <div style="padding-left: 5px;">Ring &gamma;:</div><input id="ring_shine_slider" type="range" min="0.3" max="10" step="any" oninput="changeRingShine(this.value);">
+        </fieldset>
+        <fieldset id="xwing_shine">
+            <div style="padding-left: 5px;">XWing &gamma;:</div><input id="xwing_shine_slider" type="range" min="0.3" max="10" step="any" oninput="changeXWingShine(this.value);">
+        </fieldset>
+        <fieldset id="surface_shine">
+            <div style="padding-left: 5px;">Surface &gamma;:</div><input id="surface_shine_slider" type="range" min="2" max="70" step="any" oninput="changeSurfaceShine(this.value);">
+        </fieldset>
+        <fieldset>
+            <div style="padding-left: 5px;">Ambient Color: <input id="ambient_color_button" type="color" oninput="changeAmbientColor(this.value);"></div>
+        </fieldset>
+
+        <div style="font-family:sans-serif; padding-top: 5px; padding-left: 5px;">
+            <b>SETTINGS:</b>
+        </div>
+        <fieldset id="mode_selection_fieldset">
+            <form style="padding-left: 5px;">
+                Difficulty:
+                <input id="easy_mode_radio" type="radio" name="difficulty_selection" onchange="setEasyMode();"> Easy
+                <input id="hard_mode_radio" type="radio" name="difficulty_selection" onchange="setHardMode();"> Hard
+            </form>
+        </fieldset>
+    </div>
+
+</body>
+
+</html>
