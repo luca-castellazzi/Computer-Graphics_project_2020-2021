@@ -21,10 +21,7 @@ async function init() {
     var path = window.location.pathname;
     var page = path.split("/").pop();
     baseDir = window.location.href.replace(page, '');
-    shaderDir = baseDir + "shaders/";
-
-    console.log(`baseDir: ` + baseDir);
-    console.log(`shaderDir: ` + shaderDir);
+    shaderDir = baseDir + "src/shaders/";
 
     // Load shaders from external .glsl files and create programs
     await createPrograms();
@@ -64,15 +61,15 @@ async function createPrograms() {
 
 async function loadModels() {
     // Load RING model
-    var ringStr = await utils.get_objstr("../assets/new_ring.obj");
+    var ringStr = await utils.get_objstr("src/assets/new_ring.obj");
     models[0] = new OBJ.Mesh(ringStr);
 
     // Load X-WING model
-    var xwingStr = await utils.get_objstr("../assets/X-WING.obj");
+    var xwingStr = await utils.get_objstr("src/assets/X-WING.obj");
     models[1] = new OBJ.Mesh(xwingStr);
 
     //Load SURFACE model
-    var surfaceStr = await utils.get_objstr("../assets/surface.obj");
+    var surfaceStr = await utils.get_objstr("src/assets/surface.obj");
     models[2] = new OBJ.Mesh(surfaceStr);
 
     // Load CUBEMAP dict
