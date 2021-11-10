@@ -3,7 +3,7 @@
 ## Overview
 This is our project for the "Computer Graphics" course @ Politecnico di Milano, A.Y. 2020-2021.
 
-The goal of the project is the implementation of an Endless Flying-Ring-Chaser Game using JavaScript, including different light-styles.
+The goal of the project is the implementation of an Endless Flying-Ring-Chaser Game using JavaScript, including different light styles and reflection effects.
 
 With this project, we obtained a mark of 30/30 in the exam, considering also the assignments given throughout the course.
 
