@@ -25,5 +25,5 @@ The demo of the game can be found [here](https://luca-castellazzi.github.io/comp
 
 
 ## Contributors
-* [Fabio Barbieri]()
+* [Fabio Barbieri](https://github.com/fabio-barbieri)
 * [Luca Castellazzi](https://github.com/luca-castellazzi)
