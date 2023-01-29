@@ -5,7 +5,7 @@ This is our project for the "Computer Graphics" course @ Politecnico di Milano, 
 
 The goal of the project is the implementation of an Endless Flying-Ring-Chaser Game using JavaScript, including different light styles and reflection effects.
 
-With this project, we obtained a mark of 30/30 in the exam, considering also the assignments given throughout the course
+With this project, we obtained a mark of 30/30 in the exam, considering also the assignments given throughout the course.
 
 
 ## How to Play
@@ -21,7 +21,7 @@ There are 2 different difficulties:
 
 
 ## Demo
-The demo of the game can be found [here](https://luca-castellazzi.github.io/computer-graphics_project_2020-2021/).
+The demo of the game can be found [here](https://luca-castellazzi.github.io/Computer-Graphics_project_2020-2021/).
 
 
 ## Contributors
